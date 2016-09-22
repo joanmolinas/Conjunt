@@ -1,0 +1,1 @@
+10 conjunt No es pot calcular el maxim/minim d'un conjunt buit
