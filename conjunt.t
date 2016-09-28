@@ -1,0 +1,231 @@
+template <typename T>
+conjunt<T>::conjunt() : _first(NULL), _last(NULL), _count(0) { }
+
+template <typename T>
+conjunt<T>::conjunt(const conjunt &cj) : _first(NULL), _last(NULL), _count(0) {
+    _copy(cj._first);
+}
+template <typename T>
+conjunt<T>::~conjunt() {
+    _delete();
+}
+template <typename T>
+void conjunt<T>::insereix(const T &x) {
+    if (conte(x)) return;
+    if (_count == 0) _add_front(x);
+    else {
+        node *aux = _first;
+        bool inserted = false;
+        while (aux->next != NULL && !inserted) {
+            if (x > aux->value && x < aux->next->value) {
+                node *new_node = new node();
+                new_node->value = x;
+                _add(aux, new_node);
+                inserted = true;
+            } else {
+                aux = aux->next;
+            }
+        }
+
+        if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
+
+    }
+    _count++;
+}
+
+template <typename T>
+bool conjunt<T>::conte(const T &x) const {
+    if (_count == 0) return false;
+
+    node *aux = _first;
+    bool finded = false;
+    while (aux != NULL && !finded) {
+        if (aux->value == x) finded = true;
+        aux = aux->next;
+    }
+    return finded;
+}
+
+template <typename T>
+void conjunt<T>::unir(const conjunt &B) {
+    if (B.card() == 0) return;
+    node *aux = B._first;
+    while (aux != NULL) {
+        insereix(aux->value);
+        aux = aux->next;
+    }
+}
+
+template <typename T>
+void conjunt<T>::intersectar(const conjunt &B) {
+    node *aux = _first;
+    while (aux != NULL) {
+        if (!B.conte(aux->value)) {
+            node *tmp = aux->next;
+            _delete_node(aux);
+            aux = tmp;
+        } else aux = aux->next;
+    }
+}
+
+template <typename T>
+void conjunt<T>::restar(const conjunt &B) {
+    if (B.card() == 0) return;
+    node *aux = _first;
+    while (aux != NULL) {
+        if (B.conte(aux->value)) {
+            node *tmp = aux->next;
+            _delete_node(aux);
+            aux = tmp;
+        } else aux = aux->next;
+    }
+}
+template <typename T>
+conjunt<T> conjunt<T>::operator+(const conjunt &B) const {
+    conjunt<T> cj = conjunt(*this);
+    cj.unir(B);
+    return cj;
+}
+
+template <typename T>
+conjunt<T> conjunt<T>::operator-(const conjunt &B) const {
+    conjunt<T> cj = conjunt(*this);
+    cj.restar(B);
+    return cj;
+}
+
+template <typename T>
+conjunt<T> conjunt<T>::operator*(const conjunt &B) const {
+    conjunt<T> cj = conjunt(*this);
+    cj.intersectar(B);
+    return cj;
+}
+
+template <typename T>
+bool conjunt<T>::operator==(const conjunt &B) const {
+    if (_count != B._count) return false;
+
+    node *aNode = _first, *bNode = B._first;
+    bool equals = true;
+    while (aNode != NULL && equals) {
+        if (aNode->value != bNode->value) equals = false;
+        else {
+            aNode = aNode->next;
+            bNode = bNode->next;
+        }
+    }
+
+    return equals;
+}
+
+template <typename T>
+bool conjunt<T>::operator!=(const conjunt &B) const {
+    return !(*this==B);
+}
+template <typename T>
+conjunt<T>& conjunt<T>::operator=(const conjunt &cj) {
+    if (*this != cj) {
+        _delete();
+        _copy(cj._first);
+    }
+
+    return *this;
+}
+
+template <typename T>
+T conjunt<T>::min() const {
+    return _first->value;
+}
+
+template <typename T>
+T conjunt<T>::max() const {
+    return _last->value;
+}
+
+template <typename T>
+int conjunt<T>::card() const {
+    return _count;
+}
+
+template <typename T>
+void conjunt<T>::print(ostream &os) const {
+    node *aux = _first;
+    os<<"[";
+    while (aux != NULL) {
+      os<<aux->value;
+      if (aux->next != NULL) cout<<" ";
+      aux = aux->next;
+    }
+    os<<"]";
+}
+
+template <typename T>
+void conjunt<T>::_add_front(T e) {
+    node *new_node = new node();
+    new_node->value = e;
+    if (_first != NULL) {
+        _first->prev = new_node;
+        new_node->next = _first;
+        _first = new_node;
+    } else {
+        _first = new_node;
+        _last = new_node;
+    }
+}
+
+template <typename T>
+void conjunt<T>::_add_back(T e) {
+    node *new_node = new node();
+    new_node->value = e;
+    new_node->prev = _last;
+    _last->next = new_node;
+    _last = new_node;
+}
+
+template <typename T>
+void conjunt<T>::_add(node *prev, node *new_node) {
+    new_node->next = prev->next;
+    new_node->prev = prev;
+    prev->next->prev = new_node;
+    prev->next = new_node;
+}
+
+template <typename T>
+void conjunt<T>::_delete() {
+    node *aux = _first;
+    while (aux != NULL) {
+        _first = _first->next;
+        delete aux;
+        aux = _first;
+    }
+    _first = _last = NULL;
+    _count = 0;
+}
+
+template <typename T>
+void conjunt<T>::_delete_node(node *n) {
+  if (n == _first) {
+    _first = _first->next;
+    if (_first != NULL) _first->prev = NULL;
+    delete n;
+  } else if(n == _last) {
+    _last = _last->prev;
+    _last->next = NULL;
+    delete n;
+  } else {
+    n->prev->next = n->next;
+    n->next->prev = n->prev;
+    delete n;
+  }
+  --_count;
+}
+
+template <typename T>
+void conjunt<T>::_copy(node *first) {
+    if (first == NULL) return;
+
+    while (first != NULL) {
+        insereix(first->value);
+        first = first->next;
+    }
+}
