@@ -160,6 +160,18 @@ void conjunt<T>::print(ostream &os) const {
 }
 
 template <typename T>
+void conjunt<T>::print_reversed(ostream &os) const {
+    node *aux = _last;
+    os<<"[";
+    while (aux != NULL) {
+      os<<aux->value;
+      if (aux->prev != NULL) cout<<" ";
+      aux = aux->prev;
+    }
+    os<<"]";
+}
+
+template <typename T>
 void conjunt<T>::_add_front(T e) {
     node *new_node = new node();
     new_node->value = e;
@@ -222,10 +234,26 @@ void conjunt<T>::_delete_node(node *n) {
 
 template <typename T>
 void conjunt<T>::_copy(node *first) {
-    if (first == NULL) return;
-
+  if (first != NULL) {
+    node *aux;
     while (first != NULL) {
-        insereix(first->value);
+        if (_first == NULL) {
+          _add_front(first->value);
+          aux = _first;
+        } else if(first->next == NULL) _add_back(first->value);
+        } else {
+          if (aux->next != NULL)  {
+            node *n = new node();
+            n->value = first->value;
+            _add(aux, n);
+            aux = n;
+          } else {
+            _add_back(first->value);
+            aux = _last;
+          }
+        }
+
         first = first->next;
     }
+  }
 }
