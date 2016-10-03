@@ -48,11 +48,32 @@ bool conjunt<T>::conte(const T &x) const {
 
 template <typename T>
 void conjunt<T>::unir(const conjunt &B) {
-    if (B.card() == 0) return;
-    node *aux = B._first;
-    while (aux != NULL) {
-        insereix(aux->value);
-        aux = aux->next;
+    if (B.card() == 0) return; // Fer saltar excepció
+    if (_first == NULL) _copy(B._first);
+    else {
+      node *auxB = B._first;
+      node *auxA = _first;
+      bool finished = false;
+      while (auxB != NULL) {
+        if (auxA == NULL) {
+          cout<<auxB->value<<" s'afegiria al final "<<endl;
+          _add_back(auxB->value);
+          auxB = auxB->next;
+        } else if (auxA->value == auxB->value) {
+          auxB = auxB->next;
+        } else if (auxB->value < auxA->value) {
+          cout<<auxB->value<<" s'afegiria d'avant de "<<auxA->value<<endl;
+          if (auxA == _first) _add_front(auxB->value);
+          else {
+            node *n = new node();
+            n->value = auxB->value;
+            _add(auxA->prev, n);
+          }
+          auxB = auxB->next;
+        } else {
+          auxA = auxA->next;
+        }
+      }
     }
 }
 
@@ -198,8 +219,11 @@ template <typename T>
 void conjunt<T>::_add(node *prev, node *new_node) {
     new_node->next = prev->next;
     new_node->prev = prev;
-    prev->next->prev = new_node;
+    // if (prev->next != NULL) {
+      prev->next->prev = new_node;
+    // }
     prev->next = new_node;
+
 }
 
 template <typename T>
@@ -241,7 +265,7 @@ void conjunt<T>::_copy(node *first) {
           _add_front(first->value);
           aux = _first;
         } else if(first->next == NULL) _add_back(first->value);
-        } else {
+        else {
           if (aux->next != NULL)  {
             node *n = new node();
             n->value = first->value;
@@ -252,7 +276,6 @@ void conjunt<T>::_copy(node *first) {
             aux = _last;
           }
         }
-
         first = first->next;
     }
   }
