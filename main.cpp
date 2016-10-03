@@ -8,8 +8,8 @@ string show_bool(bool b) {
 int main() {
     conjunt<int> a;
     a.insereix(1);
-    a.insereix(5);
-    a.insereix(7);
+    a.insereix(2);
+    a.insereix(3);
     a.print(cout);
     cout<<endl;
 
@@ -21,11 +21,10 @@ int main() {
     cout<<endl;
 
     conjunt<int> b;
-    b.insereix(1);
-    b.insereix(2);
+    b.insereix(3);
     b.insereix(4);
+    b.insereix(5);
     b.insereix(6);
-    b.insereix(8);
     b.insereix(9);
     b.print(cout);
     cout<<endl;

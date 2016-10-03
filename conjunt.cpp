@@ -53,7 +53,6 @@ void conjunt<T>::unir(const conjunt &B) {
     else {
       node *auxB = B._first;
       node *auxA = _first;
-      bool finished = false;
       while (auxB != NULL) {
         if (auxA == NULL) {
           // cout<<auxB->value<<" s'afegiria al final "<<endl;
@@ -79,27 +78,56 @@ void conjunt<T>::unir(const conjunt &B) {
 
 template <typename T>
 void conjunt<T>::intersectar(const conjunt &B) {
-    node *aux = _first;
-    while (aux != NULL) {
-        if (!B.conte(aux->value)) {
-            node *tmp = aux->next;
-            _delete_node(aux);
-            aux = tmp;
-        } else aux = aux->next;
+  if (B.card() > 0) {
+    node *auxB = B._first;
+    node *auxA = _first;
+
+    int i = 0;
+    while (auxA != NULL) {
+      i++;
+      if(auxB == NULL) {
+        node *tmp = auxA->next;
+        _delete_node(auxA);
+        auxA = tmp;
+      } else if (auxA->value < auxB->value) {
+        // cout<<"A es més petit que B : "<<auxA->value<< " "<<auxB->value<<" Borrem A : "<<auxA->value<<endl;
+        node *tmp = auxA->next;
+        _delete_node(auxA);
+        auxA = tmp;
+      } else if (auxB->value == auxA->value){
+        // cout<<auxA->value<<" està als 2"<<endl;
+        auxB = auxB->next;
+        auxA = auxA->next;
+      } else {
+        // cout<<"Movem el B "<<auxB->value<<" --> "<<auxB->next->value<<endl;
+        auxB = auxB->next;
+      }
     }
+    cout<<i<<" voltes"<<endl;
+  }
 }
 
 template <typename T>
 void conjunt<T>::restar(const conjunt &B) {
-    if (B.card() == 0) return;
-    node *aux = _first;
-    while (aux != NULL) {
-        if (B.conte(aux->value)) {
-            node *tmp = aux->next;
-            _delete_node(aux);
-            aux = tmp;
-        } else aux = aux->next;
+  if (B.card() > 0) {
+    node *auxB = B._first;
+    node *auxA = _first;
+
+    int i = 0;
+    while (auxA != NULL && auxB != NULL) {
+      i++;
+      if (auxA->value < auxB->value) {
+        auxA = auxA->next;;
+      } else if (auxB->value == auxA->value){
+        node *tmp = auxA->next;
+        _delete_node(auxA);
+        auxA = tmp;
+      } else {
+        auxB = auxB->next;
+      }
     }
+    cout<<i<<" voltes"<<endl;
+  }
 }
 template <typename T>
 conjunt<T> conjunt<T>::operator+(const conjunt &B) const {
@@ -219,11 +247,8 @@ template <typename T>
 void conjunt<T>::_add(node *prev, node *new_node) {
     new_node->next = prev->next;
     new_node->prev = prev;
-    // if (prev->next != NULL) {
-      prev->next->prev = new_node;
-    // }
+    prev->next->prev = new_node;
     prev->next = new_node;
-
 }
 
 template <typename T>
