@@ -82,28 +82,22 @@ void conjunt<T>::intersectar(const conjunt &B) {
     node *auxB = B._first;
     node *auxA = _first;
 
-    int i = 0;
     while (auxA != NULL) {
-      i++;
       if(auxB == NULL) {
         node *tmp = auxA->next;
         _delete_node(auxA);
         auxA = tmp;
       } else if (auxA->value < auxB->value) {
-        // cout<<"A es més petit que B : "<<auxA->value<< " "<<auxB->value<<" Borrem A : "<<auxA->value<<endl;
         node *tmp = auxA->next;
         _delete_node(auxA);
         auxA = tmp;
       } else if (auxB->value == auxA->value){
-        // cout<<auxA->value<<" està als 2"<<endl;
         auxB = auxB->next;
         auxA = auxA->next;
       } else {
-        // cout<<"Movem el B "<<auxB->value<<" --> "<<auxB->next->value<<endl;
         auxB = auxB->next;
       }
     }
-    cout<<i<<" voltes"<<endl;
   }
 }
 
@@ -113,9 +107,7 @@ void conjunt<T>::restar(const conjunt &B) {
     node *auxB = B._first;
     node *auxA = _first;
 
-    int i = 0;
     while (auxA != NULL && auxB != NULL) {
-      i++;
       if (auxA->value < auxB->value) {
         auxA = auxA->next;;
       } else if (auxB->value == auxA->value){
@@ -126,7 +118,6 @@ void conjunt<T>::restar(const conjunt &B) {
         auxB = auxB->next;
       }
     }
-    cout<<i<<" voltes"<<endl;
   }
 }
 template <typename T>
