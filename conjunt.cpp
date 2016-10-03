@@ -56,13 +56,13 @@ void conjunt<T>::unir(const conjunt &B) {
       bool finished = false;
       while (auxB != NULL) {
         if (auxA == NULL) {
-          cout<<auxB->value<<" s'afegiria al final "<<endl;
+          // cout<<auxB->value<<" s'afegiria al final "<<endl;
           _add_back(auxB->value);
           auxB = auxB->next;
         } else if (auxA->value == auxB->value) {
           auxB = auxB->next;
         } else if (auxB->value < auxA->value) {
-          cout<<auxB->value<<" s'afegiria d'avant de "<<auxA->value<<endl;
+          // cout<<auxB->value<<" s'afegiria d'avant de "<<auxA->value<<endl;
           if (auxA == _first) _add_front(auxB->value);
           else {
             node *n = new node();
