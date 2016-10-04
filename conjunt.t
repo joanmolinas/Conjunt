@@ -28,9 +28,7 @@ void conjunt<T>::insereix(const T &x) throw(error) {
         }
 
         if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
-
     }
-    _count++;
 }
 
 template <typename T>
@@ -78,13 +76,10 @@ void conjunt<T>::unir(const conjunt &B) throw(error) {
 
 template <typename T>
 void conjunt<T>::intersectar(const conjunt &B) throw(error) {
-  if (B.card() > 0) {
     node *auxB = B._first;
     node *auxA = _first;
 
-    int i = 0;
     while (auxA != NULL) {
-      i++;
       if(auxB == NULL) {
         node *tmp = auxA->next;
         _delete_node(auxA);
@@ -103,8 +98,6 @@ void conjunt<T>::intersectar(const conjunt &B) throw(error) {
         auxB = auxB->next;
       }
     }
-    cout<<i<<" voltes"<<endl;
-  }
 }
 
 template <typename T>
@@ -113,9 +106,7 @@ void conjunt<T>::restar(const conjunt &B) throw(error) {
     node *auxB = B._first;
     node *auxA = _first;
 
-    int i = 0;
     while (auxA != NULL && auxB != NULL) {
-      i++;
       if (auxA->value < auxB->value) {
         auxA = auxA->next;;
       } else if (auxB->value == auxA->value){
@@ -126,7 +117,6 @@ void conjunt<T>::restar(const conjunt &B) throw(error) {
         auxB = auxB->next;
       }
     }
-    cout<<i<<" voltes"<<endl;
   }
 }
 template <typename T>
@@ -176,7 +166,6 @@ conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
         _delete();
         _copy(cj._first);
-        _count = cj.card();
     }
 
     return *this;
@@ -236,6 +225,7 @@ void conjunt<T>::_add_front(T e) {
         _first = new_node;
         _last = new_node;
     }
+    ++_count;
 }
 
 template <typename T>
@@ -245,6 +235,7 @@ void conjunt<T>::_add_back(T e) {
     new_node->prev = _last;
     _last->next = new_node;
     _last = new_node;
+    ++_count;
 }
 
 template <typename T>
@@ -253,6 +244,7 @@ void conjunt<T>::_add(node *prev, node *new_node) {
     new_node->prev = prev;
     prev->next->prev = new_node;
     prev->next = new_node;
+    ++_count;
 }
 
 template <typename T>
