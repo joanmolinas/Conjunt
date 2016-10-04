@@ -34,7 +34,7 @@ void conjunt<T>::insereix(const T &x) throw(error) {
 }
 
 template <typename T>
-bool conjunt<T>::conte(const T &x) const {
+bool conjunt<T>::conte(const T &x) const throw() {
     if (_count == 0) return false;
 
     node *aux = _first;
