@@ -1,7 +1,7 @@
 #ifndef _CONJUNT_HPP_
 #define _CONJUNT_HPP_
 #include <iostream>
-// #include <esin/error>
+#include <esin/error>
 
 using namespace std;
 
@@ -10,35 +10,35 @@ class conjunt {
 
 public:
 
-  conjunt();
+  conjunt() throw(error);
 
-  conjunt(const conjunt& B);
+  conjunt(const conjunt& B) throw(error);
 
-  ~conjunt();
+  ~conjunt() throw();
 
-  conjunt& operator=(const conjunt& B);
+  conjunt& operator=(const conjunt& B) throw(error);
 
-  void insereix(const T& x);
+  void insereix(const T& x) throw(error);
 
-  void unir(const conjunt& B);
-  void intersectar(const conjunt& B);
-  void restar(const conjunt& B);
+  void unir(const conjunt& B) throw(error);
+  void intersectar(const conjunt& B) throw(error);
+  void restar(const conjunt& B) throw(error);
 
-  conjunt operator+(const conjunt& B) const;
-  conjunt operator*(const conjunt& B) const;
-  conjunt operator-(const conjunt& B) const;
+  conjunt operator+(const conjunt& B) const throw(error);
+  conjunt operator*(const conjunt& B) const throw(error);
+  conjunt operator-(const conjunt& B) const throw(error);
 
-  bool conte(const T& x) const;
+  bool conte(const T& x) const throw();
 
-  T max() const;
-  T min() const;
+  T max() const throw(error);
+  T min() const throw(error);
 
-  int card() const;
+  int card() const throw();
 
-  bool operator==(const conjunt& B) const;
-  bool operator!=(const conjunt& B) const;
+  bool operator==(const conjunt& B) const throw();
+  bool operator!=(const conjunt& B) const throw();
 
-  void print(ostream& os) const;
+  void print(ostream& os) const throw();
   void print_reversed(ostream& os) const;
 
   static const int NoMinMaxEnConjBuit = 10;
@@ -52,7 +52,7 @@ private:
     node *_first, *_last;
     int _count;
 
-    //PRE: Cert
+//PRE: Cert
 //POST: Crea un conjunt a partir del primer node
 void _copy(node *first);
 

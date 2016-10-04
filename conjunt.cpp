@@ -1,16 +1,16 @@
 template <typename T>
-conjunt<T>::conjunt() : _first(NULL), _last(NULL), _count(0) { }
+conjunt<T>::conjunt() throw(error): _first(NULL), _last(NULL), _count(0) { }
 
 template <typename T>
-conjunt<T>::conjunt(const conjunt &cj) : _first(NULL), _last(NULL), _count(0) {
+conjunt<T>::conjunt(const conjunt &cj) throw(error) : _first(NULL), _last(NULL), _count(0) {
     _copy(cj._first);
 }
 template <typename T>
-conjunt<T>::~conjunt() {
+conjunt<T>::~conjunt() throw() {
     _delete();
 }
 template <typename T>
-void conjunt<T>::insereix(const T &x) {
+void conjunt<T>::insereix(const T &x) throw(error) {
     if (conte(x)) return;
     if (_count == 0) _add_front(x);
     else {
@@ -82,22 +82,28 @@ void conjunt<T>::intersectar(const conjunt &B) {
     node *auxB = B._first;
     node *auxA = _first;
 
+    int i = 0;
     while (auxA != NULL) {
+      i++;
       if(auxB == NULL) {
         node *tmp = auxA->next;
         _delete_node(auxA);
         auxA = tmp;
       } else if (auxA->value < auxB->value) {
+        // cout<<"A es més petit que B : "<<auxA->value<< " "<<auxB->value<<" Borrem A : "<<auxA->value<<endl;
         node *tmp = auxA->next;
         _delete_node(auxA);
         auxA = tmp;
       } else if (auxB->value == auxA->value){
+        // cout<<auxA->value<<" està als 2"<<endl;
         auxB = auxB->next;
         auxA = auxA->next;
       } else {
+        // cout<<"Movem el B "<<auxB->value<<" --> "<<auxB->next->value<<endl;
         auxB = auxB->next;
       }
     }
+    cout<<i<<" voltes"<<endl;
   }
 }
 
@@ -107,7 +113,9 @@ void conjunt<T>::restar(const conjunt &B) {
     node *auxB = B._first;
     node *auxA = _first;
 
+    int i = 0;
     while (auxA != NULL && auxB != NULL) {
+      i++;
       if (auxA->value < auxB->value) {
         auxA = auxA->next;;
       } else if (auxB->value == auxA->value){
@@ -118,6 +126,7 @@ void conjunt<T>::restar(const conjunt &B) {
         auxB = auxB->next;
       }
     }
+    cout<<i<<" voltes"<<endl;
   }
 }
 template <typename T>
