@@ -176,6 +176,7 @@ conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
         _delete();
         _copy(cj._first);
+        _count = cj.card();
     }
 
     return *this;

@@ -176,6 +176,7 @@ conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
         _delete();
         _copy(cj._first);
+        _count = cj.card();
     }
 
     return *this;
@@ -183,11 +184,13 @@ conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
 
 template <typename T>
 T conjunt<T>::min() const throw(error) {
+    if(_count == 0) throw error(NoMinMaxEnConjBuit);
     return _first->value;
 }
 
 template <typename T>
 T conjunt<T>::max() const throw(error) {
+    if(_count == 0) throw error(NoMinMaxEnConjBuit);
     return _last->value;
 }
 
