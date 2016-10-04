@@ -1,5 +1,5 @@
 template <typename T>
-conjunt<T>::conjunt() throw(error): _first(NULL), _last(NULL), _count(0) { }
+conjunt<T>::conjunt() throw(error) : _first(NULL), _last(NULL), _count(0) { }
 
 template <typename T>
 conjunt<T>::conjunt(const conjunt &cj) throw(error) : _first(NULL), _last(NULL), _count(0) {
@@ -47,7 +47,7 @@ bool conjunt<T>::conte(const T &x) const {
 }
 
 template <typename T>
-void conjunt<T>::unir(const conjunt &B) {
+void conjunt<T>::unir(const conjunt &B) throw(error) {
     if (B.card() == 0) return; // Fer saltar excepció
     if (_first == NULL) _copy(B._first);
     else {
@@ -77,7 +77,7 @@ void conjunt<T>::unir(const conjunt &B) {
 }
 
 template <typename T>
-void conjunt<T>::intersectar(const conjunt &B) {
+void conjunt<T>::intersectar(const conjunt &B) throw(error) {
   if (B.card() > 0) {
     node *auxB = B._first;
     node *auxA = _first;
@@ -108,7 +108,7 @@ void conjunt<T>::intersectar(const conjunt &B) {
 }
 
 template <typename T>
-void conjunt<T>::restar(const conjunt &B) {
+void conjunt<T>::restar(const conjunt &B) throw(error) {
   if (B.card() > 0) {
     node *auxB = B._first;
     node *auxA = _first;
@@ -130,28 +130,28 @@ void conjunt<T>::restar(const conjunt &B) {
   }
 }
 template <typename T>
-conjunt<T> conjunt<T>::operator+(const conjunt &B) const {
+conjunt<T> conjunt<T>::operator+(const conjunt &B) const throw(error) {
     conjunt<T> cj = conjunt(*this);
     cj.unir(B);
     return cj;
 }
 
 template <typename T>
-conjunt<T> conjunt<T>::operator-(const conjunt &B) const {
+conjunt<T> conjunt<T>::operator-(const conjunt &B) const throw(error) {
     conjunt<T> cj = conjunt(*this);
     cj.restar(B);
     return cj;
 }
 
 template <typename T>
-conjunt<T> conjunt<T>::operator*(const conjunt &B) const {
+conjunt<T> conjunt<T>::operator*(const conjunt &B) const throw(error) {
     conjunt<T> cj = conjunt(*this);
     cj.intersectar(B);
     return cj;
 }
 
 template <typename T>
-bool conjunt<T>::operator==(const conjunt &B) const {
+bool conjunt<T>::operator==(const conjunt &B) const throw() {
     if (_count != B._count) return false;
 
     node *aNode = _first, *bNode = B._first;
@@ -168,11 +168,11 @@ bool conjunt<T>::operator==(const conjunt &B) const {
 }
 
 template <typename T>
-bool conjunt<T>::operator!=(const conjunt &B) const {
+bool conjunt<T>::operator!=(const conjunt &B) const throw(error) {
     return !(*this==B);
 }
 template <typename T>
-conjunt<T>& conjunt<T>::operator=(const conjunt &cj) {
+conjunt<T>& conjunt<T>::operator=(const conjunt &cj) const throw(error){
     if (*this != cj) {
         _delete();
         _copy(cj._first);
@@ -182,22 +182,22 @@ conjunt<T>& conjunt<T>::operator=(const conjunt &cj) {
 }
 
 template <typename T>
-T conjunt<T>::min() const {
+T conjunt<T>::min() const throw(error) {
     return _first->value;
 }
 
 template <typename T>
-T conjunt<T>::max() const {
+T conjunt<T>::max() const throw(error) {
     return _last->value;
 }
 
 template <typename T>
-int conjunt<T>::card() const {
+int conjunt<T>::card() const throw() {
     return _count;
 }
 
 template <typename T>
-void conjunt<T>::print(ostream &os) const {
+void conjunt<T>::print(ostream &os) const throw() {
     node *aux = _first;
     os<<"[";
     while (aux != NULL) {
@@ -220,6 +220,7 @@ void conjunt<T>::print_reversed(ostream &os) const {
     os<<"]";
 }
 
+//Private
 template <typename T>
 void conjunt<T>::_add_front(T e) {
     node *new_node = new node();
