@@ -54,7 +54,7 @@ private:
 
 //PRE: Cert
 //POST: Crea un conjunt a partir del primer node
-void _copy(node *first);
+void _copy(node *first) throw(error);
 
 //PRE: Cert
 //POST: Borra i allibera la memòria de tots els nodes del conjunt
@@ -67,11 +67,11 @@ void _delete_node(node *n);
 
 //PRE: El valor e no ha d'estar en el conjunt.
 //POST: Crea i afegeix un node nou i l'afegeix d'avant del conjunt.
-void _add_front(T e);
+void _add_front(T e) throw(error);
 
 //PRE: El valor e no ha d'estar en el conjunt.
 //POST: Crea i afegeix un node nou i l'afegeix al final del conjunt.
-void _add_back(T e);
+void _add_back(T e) throw(error);
 
 //PRE: Prev no ha de ser null i new_node tampoc
 //POST: Crea i afegeix entre la posició 2 i la n-1 del conjunt

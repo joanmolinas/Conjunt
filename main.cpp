@@ -13,5 +13,11 @@ int main() {
     b.print(cout);
     cout<<a.card()<<endl;
 
+    try {
+      a.min();
+    } catch(error e) {
+      cout<<"necessita que estigui ple"<<endl;
+    }
+
     return 0;
 }
