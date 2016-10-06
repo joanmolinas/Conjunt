@@ -16,37 +16,21 @@ conjunt<T>::~conjunt() throw() {
 template <typename T>
 void conjunt<T>::insereix(const T &x) throw(error) {
     if (conte(x)) return;
-    if (_count == 0)  {
-      try {
-        _add_front(x);
-      } catch(...) {
-        throw;
-      }
-    }
+    if (_count == 0) _add_front(x);
     else {
         node *aux = _first;
         bool inserted = false;
         while (aux->next != NULL && !inserted) {
             if (x > aux->value && x < aux->next->value) {
-              try {
-                node *new_node = new node();
-                new_node->value = x;
-                _add(aux, new_node);
-                inserted = true;
-              } catch(...) {
-                throw;
-              }
-
+              node *new_node = new node();
+              new_node->value = x;
+              _add(aux, new_node);
+              inserted = true;
             } else {
                 aux = aux->next;
             }
         }
-        try {
-          if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
-        } catch(...) {
-          throw;
-        }
-
+        if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
     }
 }
 
@@ -65,45 +49,24 @@ bool conjunt<T>::conte(const T &x) const throw() {
 template <typename T>
 void conjunt<T>::unir(const conjunt &B) throw(error) {
     if (B.card() == 0) return;
-    if (_first == NULL) {
-      try {
-        _copy(B._first);
-      } catch(...) {
-        _delete();
-        throw;
-      }
-    }
+    if (_first == NULL) _copy(B._first);
     else {
       node *auxB = B._first;
       node *auxA = _first;
       while (auxB != NULL) {
         if (auxA == NULL) {
-          try {
-            _add_back(auxB->value);
-          } catch(...) {
-            throw;
-          }
-
+          _add_back(auxB->value);
           auxB = auxB->next;
         } else if (auxA->value == auxB->value) {
           auxB = auxB->next;
         } else if (auxB->value < auxA->value) {
           if (auxA == _first) {
-            try {
-              _add_front(auxB->value);
-            } catch(...) {
-              throw;
-            }
+         	_add_front(auxB->value);
           }
           else {
-            try {
-              node *n = new node();
-              n->value = auxB->value;
-              _add(auxA->prev, n);
-            } catch(std::bad_alloc) {
-              throw;
-            }
-
+            node *n = new node();
+            n->value = auxB->value;
+            _add(auxA->prev, n);
           }
           auxB = auxB->next;
         } else {
@@ -157,41 +120,22 @@ void conjunt<T>::restar(const conjunt &B) throw(error) {
 }
 template <typename T>
 conjunt<T> conjunt<T>::operator+(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	      cj = conjunt(*this);
-	      cj.unir(B);
-    } catch(...) {
-	      cj._delete();
-	      throw;
-    }
-
+    conjunt<T> cj = conjunt(*this);
+	cj.unir(B);
     return cj;
 }
 
 template <typename T>
 conjunt<T> conjunt<T>::operator-(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	cj = conjunt(*this);
+    conjunt<T> cj = conjunt(*this);
 	cj.restar(B);
-    } catch(...) {
-	cj._delete();
-	throw;
-    }
     return cj;
 }
 
 template <typename T>
 conjunt<T> conjunt<T>::operator*(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	cj = conjunt(*this);
-	cj.intersectar(B);
-    } catch(...) {
-	cj._delete();
-	throw;
-    }
+    conjunt<T> cj = conjunt(*this);
+    cj.intersectar(B);
     return cj;
 }
 
@@ -220,12 +164,7 @@ template <typename T>
 conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
         _delete();
-	try {
-	   _copy(cj._first);
-	} catch(...) {
-	   _delete();
-	   throw;
-	}
+ 		_copy(cj._first);
     }
 
     return *this;
@@ -275,36 +214,27 @@ void conjunt<T>::print_reversed(ostream &os) const {
 //Private
 template <typename T>
 void conjunt<T>::_add_front(T e) throw(error) {
-    try {
-      node *new_node = new node();
-      new_node->value = e;
-      if (_first != NULL) {
-          _first->prev = new_node;
-          new_node->next = _first;
-          _first = new_node;
-      } else {
-          _first = new_node;
-          _last = new_node;
-      }
-      ++_count;
-    } catch(std::bad_alloc){
-       throw;
+    node *new_node = new node();
+    new_node->value = e;
+    if (_first != NULL) {
+        _first->prev = new_node;
+        new_node->next = _first;
+        _first = new_node;
+     } else {
+        _first = new_node;
+        _last = new_node;
      }
+   ++_count;
 }
 
 template <typename T>
 void conjunt<T>::_add_back(T e) throw(error) {
-  try {
-    node *new_node = new node();
-    new_node->value = e;
-    new_node->prev = _last;
-    _last->next = new_node;
-    _last = new_node;
-    ++_count;
-  }catch (std::bad_alloc) {
-    throw;
-  }
-
+  node *new_node = new node();
+  new_node->value = e;
+  new_node->prev = _last;
+  _last->next = new_node;
+  _last = new_node;
+  ++_count;
 }
 
 template <typename T>
@@ -357,14 +287,10 @@ void conjunt<T>::_copy(node *first) throw(error){
         } else if(first->next == NULL) _add_back(first->value);
         else {
           if (aux->next != NULL)  {
-            try {
               node *n = new node();
               n->value = first->value;
               _add(aux, n);
               aux = n;
-            } catch(std::bad_alloc) {
-                throw;
-              }
           } else {
             _add_back(first->value);
             aux = _last;
