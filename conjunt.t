@@ -53,7 +53,6 @@ void conjunt<T>::insereix(const T &x) throw(error) {
 template <typename T>
 bool conjunt<T>::conte(const T &x) const throw() {
     if (_count == 0) return false;
-
     node *aux = _first;
     bool finded = false;
     while (aux != NULL && !finded) {
@@ -158,13 +157,13 @@ void conjunt<T>::restar(const conjunt &B) throw(error) {
 }
 template <typename T>
 conjunt<T> conjunt<T>::operator+(const conjunt &B) const throw(error) {
-    conjunt<T> cj;    
+    conjunt<T> cj;
     try {
-	cj = conjunt(*this);
-	cj.unir(B);
+	      cj = conjunt(*this);
+	      cj.unir(B);
     } catch(...) {
-	cj._delete();
-	throw;
+	      cj._delete();
+	      throw;
     }
 
     return cj;
@@ -172,7 +171,7 @@ conjunt<T> conjunt<T>::operator+(const conjunt &B) const throw(error) {
 
 template <typename T>
 conjunt<T> conjunt<T>::operator-(const conjunt &B) const throw(error) {
-    conjunt<T> cj;    
+    conjunt<T> cj;
     try {
 	cj = conjunt(*this);
 	cj.restar(B);
@@ -185,7 +184,7 @@ conjunt<T> conjunt<T>::operator-(const conjunt &B) const throw(error) {
 
 template <typename T>
 conjunt<T> conjunt<T>::operator*(const conjunt &B) const throw(error) {
-    conjunt<T> cj;    
+    conjunt<T> cj;
     try {
 	cj = conjunt(*this);
 	cj.intersectar(B);
