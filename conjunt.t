@@ -16,13 +16,7 @@ conjunt<T>::~conjunt() throw() {
 template <typename T>
 void conjunt<T>::insereix(const T &x) throw(error) {
     if (conte(x)) return;
-    if (_count == 0)  {
-      try {
-        _add_front(x);
-      } catch(...) {
-        throw;
-      }
-    }
+    if (_count == 0) _add_front(x);
     else {
         node *aux = _first;
         bool inserted = false;
@@ -36,12 +30,7 @@ void conjunt<T>::insereix(const T &x) throw(error) {
               aux = aux->next;
             }
         }
-        try {
-          if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
-        } catch(...) {
-          throw;
-        }
-
+        if (!inserted) (x < aux->value) ? _add_front(x) : _add_back(x);
     }
 }
 
@@ -60,14 +49,7 @@ bool conjunt<T>::conte(const T &x) const throw() {
 template <typename T>
 void conjunt<T>::unir(const conjunt &B) throw(error) {
     if (B.card() == 0) return;
-    if (_first == NULL) {
-      try {
-        _copy(B._first);
-      } catch(...) {
-        _delete();
-        throw;
-      }
-    }
+    if (_first == NULL) _copy(B._first);
     else {
       node *auxB = B._first;
       node *auxA = _first;
@@ -79,7 +61,7 @@ void conjunt<T>::unir(const conjunt &B) throw(error) {
           auxB = auxB->next;
         } else if (auxB->value < auxA->value) {
           if (auxA == _first) {
-            _add_front(auxB->value);
+         	_add_front(auxB->value);
           }
           else {
             node *n = new node();
@@ -138,41 +120,22 @@ void conjunt<T>::restar(const conjunt &B) throw(error) {
 }
 template <typename T>
 conjunt<T> conjunt<T>::operator+(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	      cj = conjunt(*this);
-	      cj.unir(B);
-    } catch(...) {
-	      cj._delete();
-	      throw;
-    }
-
+    conjunt<T> cj = conjunt(*this);
+	cj.unir(B);
     return cj;
 }
 
 template <typename T>
 conjunt<T> conjunt<T>::operator-(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	      cj = conjunt(*this);
-	      cj.restar(B);
-    } catch(...) {
-	      cj._delete();
-	      throw;
-    }
+    conjunt<T> cj = conjunt(*this);
+	cj.restar(B);
     return cj;
 }
 
 template <typename T>
 conjunt<T> conjunt<T>::operator*(const conjunt &B) const throw(error) {
-    conjunt<T> cj;
-    try {
-	      cj = conjunt(*this);
-	      cj.intersectar(B);
-    } catch(...) {
-	      cj._delete();
-	      throw;
-    }
+    conjunt<T> cj = conjunt(*this);
+    cj.intersectar(B);
     return cj;
 }
 
@@ -201,12 +164,7 @@ template <typename T>
 conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
         _delete();
-	      try {
-	         _copy(cj._first);
-	      } catch(...) {
-	         _delete();
-	         throw;
-	      }
+ 		_copy(cj._first);
     }
 
     return *this;
@@ -244,17 +202,17 @@ void conjunt<T>::print(ostream &os) const throw() {
 //Private
 template <typename T>
 void conjunt<T>::_add_front(T e) throw(error) {
-  node *new_node = new node();
-  new_node->value = e;
-  if (_first != NULL) {
-      _first->prev = new_node;
-      new_node->next = _first;
-      _first = new_node;
-  } else {
-      _first = new_node;
-      _last = new_node;
-  }
-  ++_count;
+    node *new_node = new node();
+    new_node->value = e;
+    if (_first != NULL) {
+        _first->prev = new_node;
+        new_node->next = _first;
+        _first = new_node;
+     } else {
+        _first = new_node;
+        _last = new_node;
+     }
+   ++_count;
 }
 
 template <typename T>
@@ -317,10 +275,10 @@ void conjunt<T>::_copy(node *first) throw(error){
         } else if(first->next == NULL) _add_back(first->value);
         else {
           if (aux->next != NULL)  {
-            node *n = new node();
-            n->value = first->value;
-            _add(aux, n);
-            aux = n;
+              node *n = new node();
+              n->value = first->value;
+              _add(aux, n);
+              aux = n;
           } else {
             _add_back(first->value);
             aux = _last;
