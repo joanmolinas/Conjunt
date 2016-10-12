@@ -39,7 +39,6 @@ public:
   bool operator!=(const conjunt& B) const throw();
 
   void print(ostream& os) const throw();
-  void print_reversed(ostream& os) const;
 
   static const int NoMinMaxEnConjBuit = 10;
 
