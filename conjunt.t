@@ -163,13 +163,13 @@ bool conjunt<T>::operator!=(const conjunt &B) const throw() {
 template <typename T>
 conjunt<T>& conjunt<T>::operator=(const conjunt &cj) throw(error){
     if (*this != cj) {
-      node *n = _first;
+	  conjunt<T> aux(*this);
       try {
+		_delete();
         _copy(cj._first);
-        _delete();
       } catch(...) {
-        _delete();
-        _copy(n);
+       	_delete();
+        _copy(aux._first);
       }
     }
 
